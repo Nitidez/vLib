@@ -1,0 +1,6 @@
+name: ${project.parent.name}
+main: tech.nitidez.valarlibrary.vLib
+version: ${project.parent.version}
+author: Nitidez
+description: ${project.parent.description}
+api-version: 1.13
