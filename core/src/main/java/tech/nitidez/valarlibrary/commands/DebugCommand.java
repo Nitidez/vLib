@@ -42,6 +42,7 @@ public class DebugCommand extends Commands {
         } else if (args[0].equals("6")) {
             Hologram holo = Hologram.getHolograms().stream().findFirst().orElse(null);
             holo.setText("Holograma\ntotalmente\nalterado!\n{item:diamond_sword}");
+            holo.setTouchable(true);
         }
         else {
             sender.sendMessage("nothing");

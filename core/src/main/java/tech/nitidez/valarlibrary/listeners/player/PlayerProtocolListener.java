@@ -1,5 +1,7 @@
 package tech.nitidez.valarlibrary.listeners.player;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -15,6 +17,7 @@ import tech.nitidez.valarlibrary.libraries.MinecraftVersion;
 import tech.nitidez.valarlibrary.libraries.entity.giantitem.GiantItem;
 import tech.nitidez.valarlibrary.libraries.entity.interactable.Interactable;
 import tech.nitidez.valarlibrary.libraries.entity.npc.NPC;
+import tech.nitidez.valarlibrary.libraries.hologram.Hologram;
 
 public class PlayerProtocolListener {
     private static void onNPCInteract(NPC npc, Player player, EntityUseAction action, Boolean secondary) {
@@ -26,6 +29,12 @@ public class PlayerProtocolListener {
     private static void onGiantItemInteract(GiantItem gi, Player player, EntityUseAction action, Boolean secondary) {
         if (action.equals(EntityUseAction.INTERACT)) {
             player.sendMessage("interagiu com o gi "+gi.getEntityId());
+        }
+    }
+
+    private static void onHologramInteract(Hologram holo, int index, Player player, EntityUseAction action, Boolean secondary) {
+        if (action.equals(EntityUseAction.INTERACT)) {
+            player.sendMessage("interagiu com o holograma");
         }
     }
 
@@ -59,6 +68,11 @@ public class PlayerProtocolListener {
                     GiantItem gi = GiantItem.getGIs().stream().filter(gi2 -> gi2.getInteractables().contains(interactable)).findFirst().orElse(null);
                     if (gi != null) {
                         onGiantItemInteract(gi, p, action, secondary);
+                    }
+                    Hologram holo = Hologram.getHolograms().stream().filter(h -> h.getLines().stream().anyMatch(hl -> (hl.isTouchable() ? hl.getTouchable().equals(interactable) : false))).findFirst().orElse(null);
+                    if (holo != null) {
+                        int index = (new ArrayList<>(holo.getLines())).indexOf(holo.getLines().stream().filter(hl -> hl.isTouchable() ? hl.getTouchable().equals(interactable) : false).findFirst().orElse(null));
+                        onHologramInteract(holo, index, p, action, secondary);
                     }
                 }
             }

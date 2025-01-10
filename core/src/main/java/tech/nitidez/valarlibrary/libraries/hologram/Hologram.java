@@ -5,15 +5,11 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import tech.nitidez.valarlibrary.libraries.entity.hologram.HologramLine;
 
@@ -21,7 +17,7 @@ public class Hologram {
     private Set<Player> playersShown;
     private Set<HologramLine> lines;
     private Location location;
-    public static final String itemRegex = "\\{item:([A-Za-z0-9_]+)\\}";
+    private boolean touchable;
     private static final double distance = 0.25;
     private static Set<Hologram> hologramSet = new LinkedHashSet<>();
 
@@ -31,6 +27,10 @@ public class Hologram {
         this.location = location;
         hologramSet.add(this);
         addLine(text);
+    }
+
+    public Set<HologramLine> getLines() {
+        return lines;
     }
 
     public Location getLocation() {
@@ -65,16 +65,12 @@ public class Hologram {
         }
         int spaceIndex = linesList.size() - index - 1;
         HologramLine addedLine;
-        Pattern pattern = Pattern.compile(itemRegex);
-        Matcher matcher = pattern.matcher(text.replace(" ", ""));
         if (text.replace(" ", "").length() == 0) {
             addedLine = new HologramLine(location.clone().add(0, spaceIndex*distance, 0));
-        } else if (matcher.find()) {
-            String item = matcher.group(1);
-            addedLine = new HologramLine(location.clone().add(0, spaceIndex*distance, 0), new ItemStack(Material.valueOf(item.toUpperCase())));
         } else {
             addedLine = new HologramLine(location.clone().add(0, spaceIndex*distance, 0), text);
         }
+        addedLine.setTouchable(touchable);
 
         linesList.add(index, addedLine);
         lines = new LinkedHashSet<>(linesList);
@@ -98,6 +94,8 @@ public class Hologram {
         }
         HologramLine removedLine = linesList.get(index);
         removedLine.despawn();
+        removedLine.setTouchable(false);
+        removedLine.uncache();
         linesList.remove(index);
         lines = new LinkedHashSet<>(linesList);
     }
@@ -137,6 +135,17 @@ public class Hologram {
                     line.despawn(p);
                 }
             }
+        }
+    }
+
+    public boolean isTouchable() {
+        return touchable;
+    }
+
+    public void setTouchable(boolean touchable) {
+        this.touchable = touchable;
+        for (HologramLine line : lines) {
+            line.setTouchable(touchable);
         }
     }
 

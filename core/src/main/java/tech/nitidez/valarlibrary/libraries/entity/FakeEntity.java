@@ -200,6 +200,10 @@ public class FakeEntity {
         if (this.getPlayers().contains(plr)) this.playersShown.remove(plr);
     }
 
+    public void uncache() {
+        fakeEntitySet.remove(this);
+    }
+
     public static Set<FakeEntity> getEntities() {
         return fakeEntitySet;
     }

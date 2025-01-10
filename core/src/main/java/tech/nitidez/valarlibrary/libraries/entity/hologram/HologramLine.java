@@ -1,23 +1,20 @@
 package tech.nitidez.valarlibrary.libraries.entity.hologram;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 import tech.nitidez.valarlibrary.libraries.entity.FakeEntity;
+import tech.nitidez.valarlibrary.libraries.entity.interactable.Interactable;
 
 public class HologramLine extends FakeEntity {
     private String hologramText;
-    private ItemStack hologramItem;
-    private boolean itemLine;
     private boolean spaceLine;
+    private Interactable touchable;
 
     public HologramLine(Location location) {
         super(EntityType.ARMOR_STAND, location);
         hologramText = "";
-        hologramItem = new ItemStack(Material.AIR);
-        itemLine = false;
         spaceLine = true;
         this.addMetadata(0, (byte) 0x20);
         this.addMetadata(10, (byte) (0x01 | 0x08 | 0x10));
@@ -26,8 +23,6 @@ public class HologramLine extends FakeEntity {
     public HologramLine(Location location, String text) {
         super(EntityType.ARMOR_STAND, location);
         hologramText = text;
-        hologramItem = new ItemStack(Material.AIR);
-        itemLine = false;
         spaceLine = false;
         this.addMetadata(0, (byte) 0x20);
         this.addMetadata(2, text);
@@ -35,28 +30,52 @@ public class HologramLine extends FakeEntity {
         this.addMetadata(10, (byte) (0x01 | 0x08 | 0x10));
     }
 
-    public HologramLine(Location location, ItemStack item) {
-        super(EntityType.DROPPED_ITEM, location);
-        hologramText = "";
-        hologramItem = item;
-        itemLine = true;
-        spaceLine = false;
-        this.addMetadata(7, item);
-    }
-
     public String getText() {
         return hologramText;
     }
 
-    public ItemStack getItem() {
-        return hologramItem;
-    }
-
-    public boolean isItemLine() {
-        return itemLine;
-    }
-
     public boolean isSpaceLine() {
         return spaceLine;
+    }
+
+    public boolean isTouchable() {
+        return touchable != null;
+    }
+
+    public Interactable getTouchable() {
+        return touchable;
+    }
+
+    public void setTouchable(boolean touchable) {
+        if (touchable) {
+            if (this.touchable == null) {
+                this.touchable = new Interactable(getLocation(), EntityType.SLIME);
+                for (Player p : this.getPlayers()) {
+                    this.touchable.spawn(p);
+                }
+            }
+        } else {
+            if (this.touchable != null) {
+                this.touchable.despawn();
+                this.touchable.uncache();
+                this.touchable = null;
+            }
+        }
+    }
+
+    @Override
+    protected void spawnM(Player player) {
+        if (touchable != null) {
+            touchable.spawn(player);
+        }
+        super.spawnM(player);
+    }
+
+    @Override
+    protected void despawnM(Player player) {
+        if (touchable != null) {
+            touchable.despawn(player);
+        }
+        super.despawnM(player);
     }
 }
