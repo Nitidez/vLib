@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ public class Hologram {
     private Set<HologramLine> lines;
     private Location location;
     private boolean touchable;
+    private BiConsumer<Hologram, Player> touchCallback;
     private static final double distance = 0.25;
     private static Set<Hologram> hologramSet = new LinkedHashSet<>();
 
@@ -146,6 +148,16 @@ public class Hologram {
         this.touchable = touchable;
         for (HologramLine line : lines) {
             line.setTouchable(touchable);
+        }
+    }
+
+    public void onTouch(BiConsumer<Hologram, Player> callback) {
+        this.touchCallback = callback;
+    }
+
+    public void touch(Player player) {
+        if (this.touchCallback != null) {
+            this.touchCallback.accept(this, player);
         }
     }
 

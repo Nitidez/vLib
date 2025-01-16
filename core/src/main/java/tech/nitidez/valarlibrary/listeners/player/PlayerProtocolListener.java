@@ -34,7 +34,7 @@ public class PlayerProtocolListener {
 
     private static void onHologramInteract(Hologram holo, int index, Player player, EntityUseAction action, Boolean secondary) {
         if (action.equals(EntityUseAction.INTERACT)) {
-            player.sendMessage("interagiu com o holograma");
+            holo.touch(player);
         }
     }
 
