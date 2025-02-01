@@ -63,6 +63,11 @@ public class HologramLine extends FakeEntity {
         }
     }
 
+    public void setText(String text) {
+        this.hologramText = text;
+        this.addMetadata(2, text);
+    }
+
     @Override
     protected void spawnM(Player player) {
         if (touchable != null) {
@@ -77,5 +82,13 @@ public class HologramLine extends FakeEntity {
             touchable.despawn(player);
         }
         super.despawnM(player);
+    }
+
+    @Override
+    public void move(Location moveLoc) {
+        super.move(moveLoc);
+        if (touchable != null) {
+            touchable.move(moveLoc);
+        }
     }
 }

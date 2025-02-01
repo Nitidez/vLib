@@ -6,6 +6,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import tech.nitidez.valarlibrary.commands.Commands;
+import tech.nitidez.valarlibrary.database.Database;
+import tech.nitidez.valarlibrary.database.data.DataTable;
+import tech.nitidez.valarlibrary.database.tables.ProfileTable;
 import tech.nitidez.valarlibrary.listeners.Listeners;
 import tech.nitidez.valarlibrary.plugin.ValarPlugin;
 
@@ -39,6 +42,18 @@ public class vLib extends ValarPlugin {
         if (Bukkit.getSpawnRadius() != 0) {
             Bukkit.setSpawnRadius(0);
         }
+
+        DataTable.TABLES.add(new ProfileTable());
+        Database.setupDatabase(
+            getConfig().getString("database.type").toUpperCase(),
+            getConfig().getBoolean("database.mysql.mariadb"),
+            getConfig().getString("database.mysql.hostname"),
+            getConfig().getString("database.mysql.port"),
+            getConfig().getString("database.mysql.name"),
+            getConfig().getString("database.mysql.user"),
+            getConfig().getString("database.mysql.password")
+        );
+
         Listeners.setupListeners();
         Commands.setupCommands();
 

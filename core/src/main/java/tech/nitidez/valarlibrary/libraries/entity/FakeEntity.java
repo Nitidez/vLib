@@ -99,7 +99,9 @@ public class FakeEntity {
     public void move(Location moveLoc) {
         Location cL = this.location;
         this.location = new Location(moveLoc.getWorld(), moveLoc.getX(), moveLoc.getY(), moveLoc.getZ(), cL.getYaw(), cL.getPitch());
-        refresh();
+        for (Player p : getPlayers()) {
+            EntityManager.teleportEntity(p, this);
+        }
     }
 
     public void look(float yaw, float pitch) {

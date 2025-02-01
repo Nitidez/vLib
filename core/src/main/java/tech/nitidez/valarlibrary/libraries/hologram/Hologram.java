@@ -1,6 +1,7 @@
 package tech.nitidez.valarlibrary.libraries.hologram;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -103,8 +104,12 @@ public class Hologram {
     }
 
     public void setLine(int index, String text) {
-        removeLine(index);
-        addLine(index, text);
+        String[] textSplit = text.split("\n");
+        if (textSplit.length > 1) {
+            textSplit = Arrays.stream(textSplit).skip(1).toArray(String[]::new);
+            addLine(index+1, String.join("\n", textSplit));
+        }
+        (new ArrayList<>(lines)).get(index).setText(text);
     }
 
     public void clear() {
@@ -158,6 +163,15 @@ public class Hologram {
     public void touch(Player player) {
         if (this.touchCallback != null) {
             this.touchCallback.accept(this, player);
+        }
+    }
+
+    public void setLocation(Location location) {
+        List<HologramLine> linesList = new ArrayList<>(lines);
+        this.location = location;
+        for (int i = 0; i < lines.size(); i++) {
+            int distanceI = lines.size()-i-1;
+            linesList.get(i).move(location.clone().add(0, distance*distanceI, 0));
         }
     }
 

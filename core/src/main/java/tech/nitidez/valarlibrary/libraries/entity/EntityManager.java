@@ -47,6 +47,11 @@ public class EntityManager {
         pm.sendServerPacket(player, packet);
     }
 
+    public static void teleportEntity(Player player, FakeEntity container) {
+        PacketContainer packet = FakeEntityPackets.FE_TELEPORT.get(container);
+        pm.sendServerPacket(player, packet);
+    }
+
     public static void unloadEntity(Player player, FakeEntity container) {
         PacketContainer packet = FakeEntityPackets.FE_DESTROY.get(container);
         pm.sendServerPacket(player, packet);

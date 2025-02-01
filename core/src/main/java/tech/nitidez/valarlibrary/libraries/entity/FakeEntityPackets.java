@@ -57,6 +57,19 @@ public class FakeEntityPackets {
         return packet;
     };
 
+    public static final Packet<FakeEntity> FE_TELEPORT = (FakeEntity container) -> {
+        PacketContainer packet = createPacket(PacketType.Play.Server.ENTITY_TELEPORT);
+        Location loc = container.getLocation();
+        packet.getIntegers().write(0, container.getEntityId())
+        .write(1, Utils.get1_8LocInt(loc.getX()))
+        .write(2, Utils.get1_8LocInt(loc.getY()))
+        .write(3, Utils.get1_8LocInt(loc.getZ()));
+        packet.getBytes().write(0, Utils.toByteAngle(loc.getYaw()))
+        .write(1, Utils.toByteAngle(loc.getPitch()));
+        packet.getBooleans().write(0, false);
+        return packet;
+    };
+
     public static final Packet<FakeEntity> FE_METADATA = (FakeEntity container) -> {
         PacketContainer packet = createPacket(PacketType.Play.Server.ENTITY_METADATA);
         packet.getIntegers().write(0, container.getEntityId());
