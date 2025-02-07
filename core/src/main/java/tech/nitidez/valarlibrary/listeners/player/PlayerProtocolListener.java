@@ -13,11 +13,11 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.EntityUseAction;
 
 import tech.nitidez.valarlibrary.vLib;
-import tech.nitidez.valarlibrary.libraries.MinecraftVersion;
-import tech.nitidez.valarlibrary.libraries.entity.giantitem.GiantItem;
-import tech.nitidez.valarlibrary.libraries.entity.interactable.Interactable;
-import tech.nitidez.valarlibrary.libraries.entity.npc.NPC;
-import tech.nitidez.valarlibrary.libraries.hologram.Hologram;
+import tech.nitidez.valarlibrary.lib.MinecraftVersion;
+import tech.nitidez.valarlibrary.lib.entity.giantitem.GiantItem;
+import tech.nitidez.valarlibrary.lib.entity.interactable.Interactable;
+import tech.nitidez.valarlibrary.lib.entity.npc.NPC;
+import tech.nitidez.valarlibrary.lib.hologram.Hologram;
 
 public class PlayerProtocolListener {
     private static void onNPCInteract(NPC npc, Player player, EntityUseAction action, Boolean secondary) {

@@ -2,7 +2,7 @@ package tech.nitidez.valarlibrary.utils;
 
 import org.bukkit.Location;
 
-import tech.nitidez.valarlibrary.libraries.MinecraftVersion;
+import tech.nitidez.valarlibrary.lib.MinecraftVersion;
 
 /**
  * Classe com utilitários diversos sem nicho predefinido.

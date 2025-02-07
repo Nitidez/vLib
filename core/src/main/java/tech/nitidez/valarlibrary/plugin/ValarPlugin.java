@@ -4,8 +4,8 @@ import tech.nitidez.valarlibrary.plugin.config.FileUtils;
 import tech.nitidez.valarlibrary.plugin.config.ValarConfig;
 import tech.nitidez.valarlibrary.plugin.config.ValarWriter;
 import tech.nitidez.valarlibrary.plugin.logger.ValarLogger;
-import tech.nitidez.valarlibrary.reflection.Accessors;
-import tech.nitidez.valarlibrary.reflection.acessors.FieldAccessor;
+import tech.nitidez.valarlibrary.utils.reflection.Accessors;
+import tech.nitidez.valarlibrary.utils.reflection.acessors.FieldAccessor;
 import org.bukkit.plugin.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 

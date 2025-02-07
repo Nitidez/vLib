@@ -5,10 +5,10 @@ import org.bukkit.Bukkit;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import tech.nitidez.valarlibrary.commands.Commands;
-import tech.nitidez.valarlibrary.database.Database;
-import tech.nitidez.valarlibrary.database.data.DataTable;
-import tech.nitidez.valarlibrary.database.tables.ProfileTable;
+import tech.nitidez.valarlibrary.cmds.Commands;
+import tech.nitidez.valarlibrary.data.Database;
+import tech.nitidez.valarlibrary.data.data.DataTable;
+import tech.nitidez.valarlibrary.data.tables.ProfileTable;
 import tech.nitidez.valarlibrary.listeners.Listeners;
 import tech.nitidez.valarlibrary.plugin.ValarPlugin;
 
