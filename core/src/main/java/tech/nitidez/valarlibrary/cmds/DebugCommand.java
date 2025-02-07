@@ -1,5 +1,7 @@
 package tech.nitidez.valarlibrary.cmds;
 
+import java.util.Arrays;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -14,6 +16,7 @@ import tech.nitidez.valarlibrary.lib.entity.giantitem.GiantItem;
 import tech.nitidez.valarlibrary.lib.entity.npc.NPC;
 import tech.nitidez.valarlibrary.lib.entity.npc.skin.NPCSkinData;
 import tech.nitidez.valarlibrary.lib.hologram.Hologram;
+import tech.nitidez.valarlibrary.lib.tag.TagLib;
 
 public class DebugCommand extends Commands {
 
@@ -55,21 +58,24 @@ public class DebugCommand extends Commands {
             holo2.setLocation(holo2.getLocation().clone().add(4, 4, 4));
             break;
         case 7:
-            //TagLib.setPrefix(plr, "TestPrefix");
+            TagLib.setPrefix(plr, plr, String.join(" ", Arrays.asList(args).subList(1, args.length)));
             break;
         case 8:
-            //TagLib.setSuffix(plr, "TestSuffix");
+            TagLib.setSuffix(plr, plr, String.join(" ", Arrays.asList(args).subList(1, args.length)));
             break;
         case 9:
-            //TagLib.setPriority(plr, 2);
+            //TagLib.setPrefix(plr, plr, "PrefixDiff");
+            break;
         case 10:
-            //TagLib.setPriority(plr, 3);
+            TagLib.setPriority(plr, plr, Integer.parseInt(args[1]));
+            break;
         case 11:
             DataRow row = Database.getDatabase().load(DataTable.getTable("vlDB_Profile").get(), plr.getUniqueId().toString())
             .orElse(new DataRow(DataTable.getTable("vlDB_Profile").get(), plr.getUniqueId().toString()));
             row.set("role", "VIP");
             Database.cacheRow(row);
             Database.getDatabase().save(DataTable.getTable("vlDB_Profile").get());
+            break;
         default:
             sender.sendMessage("nothing");
             break;
