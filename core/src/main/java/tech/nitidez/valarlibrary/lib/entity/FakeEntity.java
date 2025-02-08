@@ -12,10 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Serializer;
+
+import tech.nitidez.valarlibrary.vLib;
 
 public class FakeEntity {
     public static Set<FakeEntity> fakeEntitySet = new HashSet<>();
@@ -28,6 +31,7 @@ public class FakeEntity {
     }
 
 
+    private BukkitTask task;
     private int entityID;
     private UUID entityUUID;
     private EntityType entityType;
@@ -36,6 +40,7 @@ public class FakeEntity {
     private FakeEntityInventory inventory;
     private Map<Integer, Object> meta;
     private Map<Integer, Serializer> metaSerializer;
+    private Set<Player> unrenderedPlayers;
     
     public FakeEntity(EntityType entityType, Location location) {
         this.entityID = EntityManager.atomicIncrementAndGetEntityId();
@@ -47,6 +52,39 @@ public class FakeEntity {
         this.meta = new HashMap<>();
         this.metaSerializer = new HashMap<>();
         fakeEntitySet.add(this);
+        this.unrenderedPlayers = new HashSet<>();
+        startTask();
+    }
+
+    public void startTask() {
+        if (task != null) {
+            return;
+        }
+        this.task = Bukkit.getScheduler().runTaskTimer(vLib.getInstance(), () -> {
+            this.getPlayers().forEach(player -> {
+                if (player.getLocation().getWorld().equals(this.getLocation().getWorld()) && player.getLocation().distance(this.getLocation()) > 16) {
+                    if (!this.getUnrenderedPlayers().contains(player)) {
+                        this.unrenderedPlayers.add(player);
+                    }
+                } else {
+                    if (this.getUnrenderedPlayers().contains(player)) {
+                        this.despawn(player);
+                        this.spawn(player);
+                        this.unrenderedPlayers.remove(player);
+                    }
+                }
+            });
+        }, 0L, 20L);
+    }
+
+    public void stopTask() {
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
+    private Set<Player> getUnrenderedPlayers() {
+        return this.unrenderedPlayers.stream().filter(p -> this.getPlayers().contains(p)).collect(Collectors.toSet());
     }
 
     public int getEntityId() {
