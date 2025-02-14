@@ -3,11 +3,8 @@ package tech.nitidez.valarlibrary.bungee;
 import tech.nitidez.valarlibrary.bungee.cmd.Commands;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -15,7 +12,6 @@ public class Bungee extends Plugin {
   
   private static Bungee instance;
   public static HashMap<ProxiedPlayer, ProxiedPlayer> reply = new HashMap<ProxiedPlayer, ProxiedPlayer>();
-  private Configuration config;
   
   public Bungee() {
     instance = this;
@@ -57,7 +53,6 @@ public class Bungee extends Plugin {
   
   @Override
   public void onEnable() {
-    saveDefaultConfig();
     
     Commands.setupCommands();
     
@@ -69,22 +64,6 @@ public class Bungee extends Plugin {
   @Override
   public void onDisable() {
     this.getLogger().info("O plugin foi desativado.");
-  }
-  
-  public void saveDefaultConfig() {
-    for (String fileName : new String[]{"config"}) {
-      File file = new File("plugins/" + getDescription().getName() + "/" + fileName + ".yml");
-      if (!file.exists()) {
-        file.getParentFile().mkdirs();
-        copyFile(Bungee.getInstance().getResourceAsStream(fileName + ".yml"), file);
-      }
-      
-      try {
-        this.config = YamlConfiguration.getProvider(YamlConfiguration.class).load(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-      } catch (IOException ex) {
-        this.getLogger().log(Level.WARNING, "Cannot load " + fileName + ".yml: ", ex);
-      }
-    }
   }
 
 }

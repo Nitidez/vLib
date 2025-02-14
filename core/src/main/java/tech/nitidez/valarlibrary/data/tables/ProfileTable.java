@@ -24,7 +24,7 @@ public class ProfileTable extends DataTable {
                 Optional.of("{}")
             ),
             new DataColumn(
-                "role",
+                "rank",
                 String.class,
                 false, false, false,
                 Optional.empty(),

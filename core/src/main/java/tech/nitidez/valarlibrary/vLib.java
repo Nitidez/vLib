@@ -11,6 +11,7 @@ import tech.nitidez.valarlibrary.data.data.DataTable;
 import tech.nitidez.valarlibrary.data.tables.ProfileTable;
 import tech.nitidez.valarlibrary.listeners.Listeners;
 import tech.nitidez.valarlibrary.plugin.ValarPlugin;
+import tech.nitidez.valarlibrary.ranks.Rank;
 
 public class vLib extends ValarPlugin {
 
@@ -43,6 +44,8 @@ public class vLib extends ValarPlugin {
             Bukkit.setSpawnRadius(0);
         }
 
+        saveDefaultConfig();
+
         DataTable.TABLES.add(new ProfileTable());
         Database.setupDatabase(
             getConfig().getString("database.type").toUpperCase(),
@@ -54,6 +57,7 @@ public class vLib extends ValarPlugin {
             getConfig().getString("database.mysql.password")
         );
 
+        Rank.setupRanks();
         Listeners.setupListeners();
         Commands.setupCommands();
 

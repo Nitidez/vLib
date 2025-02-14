@@ -17,6 +17,8 @@ import tech.nitidez.valarlibrary.lib.entity.npc.NPC;
 import tech.nitidez.valarlibrary.lib.entity.npc.skin.NPCSkinData;
 import tech.nitidez.valarlibrary.lib.hologram.Hologram;
 import tech.nitidez.valarlibrary.lib.tag.TagLib;
+import tech.nitidez.valarlibrary.player.profile.Profile;
+import tech.nitidez.valarlibrary.ranks.Rank;
 
 public class DebugCommand extends Commands {
 
@@ -70,10 +72,10 @@ public class DebugCommand extends Commands {
             TagLib.setPriority(plr, plr, Integer.parseInt(args[1]));
             break;
         case 11:
-            DataRow row = Database.getDatabase().load(DataTable.getTable("vlDB_Profile").get(), plr.getUniqueId().toString())
-            .orElse(new DataRow(DataTable.getTable("vlDB_Profile").get(), plr.getUniqueId().toString()));
-            row.set("role", "VIP");
-            Database.cacheRow(row);
+            Profile profile = Profile.loadProfile(plr);
+            profile.setTag(Rank.getRank("administrator"));
+            profile.setPreference("lobby", true);
+            plr.sendMessage(profile.getPreferences().toString());
             Database.getDatabase().save(DataTable.getTable("vlDB_Profile").get());
             break;
         default:

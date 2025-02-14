@@ -1,0 +1,40 @@
+# Ranks configuration file.
+#
+# Example:
+#
+# --------------------------------
+#
+#  member:                      -- Rank Id
+#    name: 'Member'             -- Rank Name
+#    prefix: '&7[Member] '      -- Rank Prefix
+#    broadcast: true            -- Broadcast on Join Lobby
+#    alwaysVisible: true        -- Always Visible for Players
+#    permission: 'ranks.member' -- Permission needed.
+#
+# --------------------------------
+
+ranks:
+  administrator:
+    name: 'Administrator'
+    prefix: '&4[Admin] '
+    broadcast: true
+    alwaysvisible: true
+    permission: 'ranks.admin'
+  helper:
+    name: 'Helper'
+    prefix: '&3[Helper] '
+    broadcast: true
+    alwaysvisible: true
+    permission: 'ranks.helper'
+  vip:
+    name: 'VIP'
+    prefix: '&a[VIP] '
+    broadcast: true
+    alwaysvisible: false
+    permission: 'ranks.vip'
+  member:
+    name: 'Member'
+    prefix: '&7'
+    broadcast: false
+    alwaysvisible: false
+    permission: ''
