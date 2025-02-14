@@ -151,43 +151,6 @@ public final class NPCPackets {
         return orient;
     };
 
-    // TODO
-    /*public static final PacketList<NPCContainer> NPC_SET_EQUIPMENT = (NPCContainer container) -> {
-        final List<Pair<ItemSlot, ItemStack>> equipmentList = container.getNPCData()
-            .getTraits().getEquipment(false).getSlotStackPairList();
-        if (equipmentList.isEmpty()) return new LinkedHashSet<>();
-
-        final LinkedHashSet<PacketContainer> packets = new LinkedHashSet<>();
-        if (PluginUtils.ServerVersion.v1_16_R1.atOrAbove()) {
-            PacketContainer equipmentPacket = createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT);
-            equipmentPacket.getIntegers().write(0, container.getNPCEntityID());
-            equipmentPacket.getSlotStackPairLists().write(0, equipmentList);
-            packets.add(equipmentPacket);
-        } else {
-            for (Pair<ItemSlot, ItemStack> pair : equipmentList) {
-                PacketContainer equipmentPacket = createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT);
-                equipmentPacket.getIntegers().write(0, container.getNPCEntityID());
-                if (PluginUtils.ServerVersion.v1_9_R1.atOrAbove()) {
-                    equipmentPacket.getItemSlots().write(0, pair.getFirst());
-                } else {
-                    int equipmentSlot;
-                    switch (pair.getFirst()) {
-                        case MAINHAND: equipmentSlot = 0; break;
-                        case FEET: equipmentSlot = 1; break;
-                        case LEGS: equipmentSlot = 2; break;
-                        case CHEST: equipmentSlot = 3; break;
-                        case HEAD: equipmentSlot = 4; break;
-                        default: continue;
-                    }
-                    equipmentPacket.getIntegers().write(1, equipmentSlot);
-                }
-                equipmentPacket.getItemModifier().write(0, pair.getSecond());
-                packets.add(equipmentPacket);
-            }
-        }
-        return packets;
-    };*/
-
     public static final PacketList<List<String>> SCOREBOARD_CREATE_AND_ADD = (List<String> npcNames) -> {
         final LinkedHashSet<PacketContainer> scoreboardPackets = new LinkedHashSet<>();
         

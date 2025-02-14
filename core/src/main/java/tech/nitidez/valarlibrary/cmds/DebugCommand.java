@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import tech.nitidez.valarlibrary.data.Database;
-import tech.nitidez.valarlibrary.data.data.DataRow;
 import tech.nitidez.valarlibrary.data.data.DataTable;
 import tech.nitidez.valarlibrary.lib.entity.FakeEntity;
 import tech.nitidez.valarlibrary.lib.entity.giantitem.GiantItem;
