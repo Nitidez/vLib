@@ -20,6 +20,7 @@ import tech.nitidez.valarlibrary.data.Database;
 import tech.nitidez.valarlibrary.data.data.DataRow;
 import tech.nitidez.valarlibrary.data.data.DataTable;
 import tech.nitidez.valarlibrary.data.tables.ProfileTable;
+import tech.nitidez.valarlibrary.lib.profile.Mojang;
 import tech.nitidez.valarlibrary.ranks.Rank;
 
 public class Profile {
@@ -56,6 +57,41 @@ public class Profile {
 
     public void setTag(Rank rank) {
         this.data.set("tagged", rank.getRankId());
+    }
+
+    public void setFake(String fakeName) {
+        this.data.set("faked", fakeName);
+    }
+
+    public String getFakedName() {
+        String faked = this.getFake();
+        if (faked != null) {
+            return faked;
+        } else {
+            return this.getName();
+        }
+    }
+
+    public String getName() {
+        if (this.getFake() != null) {
+            try {
+                String name = Mojang.getName(this.uuid);
+                return name;
+            } catch (Exception e) {
+            }
+        }
+        return getDName();
+    }
+
+    public String getDName() {
+        return (String) this.data.get("name").get();
+    }
+
+    public String getFake() {
+        String faked = (String) this.data.get("faked").orElse("");
+        if (faked.length() > 0) {
+            return faked;
+        } else return null;
     }
 
     public Map<String, Boolean> getPreferences() {
@@ -109,9 +145,12 @@ public class Profile {
     }
 
     public List<Rank> getRanks() {
+        return getRanks0(this.getPlayer());
+    }
+
+    private List<Rank> getRanks0(Player player) {
         List<Rank> ranks = new ArrayList<>();
-        if (this.getPlayer() != null) {
-            Player player = this.getPlayer();
+        if (player != null) {
             ranks = Rank.getRanks().stream().filter(r -> player.hasPermission(r.getPermission())).collect(Collectors.toList());
         } else {
             String rank = (String) this.data.get("rank").orElse("");
@@ -122,8 +161,34 @@ public class Profile {
         return ranks;
     }
 
-    public static Profile loadProfile(String uuid) {
-        return new Profile(Database.getCachedRows().stream().filter(
+    private static String nameToUUID(String uuid) {
+        try {
+            String newUuid = Mojang.getUUID(uuid);
+            return newUuid;
+        } catch (Exception e) {
+            return Mojang.getOfflineUUID(uuid).toString();
+        }
+    }
+
+    public static boolean hasProfile(String uuidOrName) {
+        if (hasProfile0(nameToUUID(uuidOrName))) return true;
+        return hasProfile0(uuidOrName);
+    }
+
+    private static boolean hasProfile0(String uuid) {
+        if (Database.getCachedRows().stream().anyMatch(r -> 
+        (r.getTable() instanceof ProfileTable) &&
+        (r.get("uuid").get().equals(uuid)) )) return true;
+        DataTable table = DataTable.getTable("vlDB_Profile").get();
+        boolean rowPresent = Database.getDatabase().load(table, uuid).isPresent();
+        return rowPresent;
+    }
+
+    private static Profile createOrLoadProfile0(String uuid, Player plr) {
+        Player plr0 = Bukkit.getPlayer(UUID.fromString(uuid));
+        if (plr0 != null) plr = plr0;
+        String plrName = plr != null ? plr.getName() : "";
+        Profile profile = new Profile(Database.getCachedRows().stream().filter(
             r ->
             (r.getTable() instanceof ProfileTable) &&
             (r.get("uuid").get().equals(uuid))
@@ -137,6 +202,31 @@ public class Profile {
                 return row;
             }).get()
         ), UUID.fromString(uuid));
+        if (profile.getFake() == null) {
+            if (!profile.getDName().equals(plrName)) profile.getData().set("name", plrName);
+        }
+        if (plr != null) {
+            String rankName = profile.getRanks0(plr).get(0).getRankId();
+            if (!profile.getData().get("rank").equals(rankName)) profile.getData().set("rank", rankName);
+        }
+        return profile;
+    }
+
+    public static Profile createOrLoadProfile(String uuidOrName) {
+        return hasProfile(nameToUUID(uuidOrName)) ? createOrLoadProfile0(nameToUUID(uuidOrName), null) : createOrLoadProfile0(uuidOrName, null);
+    }
+
+    public static Profile createOrLoadProfile(UUID uuid) {
+        return createOrLoadProfile0(uuid.toString(), null);
+    }
+
+    public static Profile createOrLoadProfile(Player player) {
+        return createOrLoadProfile0(player.getUniqueId().toString(), player);
+    }
+
+    public static Profile loadProfile(String uuidOrName) {
+        if (hasProfile(uuidOrName)) return createOrLoadProfile(uuidOrName);
+        return null;
     }
 
     public static Profile loadProfile(UUID uuid) {

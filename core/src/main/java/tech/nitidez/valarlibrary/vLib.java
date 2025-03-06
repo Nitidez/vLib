@@ -12,10 +12,12 @@ import tech.nitidez.valarlibrary.data.tables.ProfileTable;
 import tech.nitidez.valarlibrary.listeners.Listeners;
 import tech.nitidez.valarlibrary.plugin.ValarPlugin;
 import tech.nitidez.valarlibrary.ranks.Rank;
+import tech.nitidez.valarlibrary.servers.Servers;
 
 public class vLib extends ValarPlugin {
 
     public static boolean validInit;
+    public static boolean SUBSERVERS = false;
     private static vLib instance;
 
     public static vLib getInstance() {
@@ -56,7 +58,8 @@ public class vLib extends ValarPlugin {
             getConfig().getString("database.mysql.user"),
             getConfig().getString("database.mysql.password")
         );
-
+        
+        Servers.setupServers();
         Rank.setupRanks();
         Listeners.setupListeners();
         Commands.setupCommands();

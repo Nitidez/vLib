@@ -14,12 +14,13 @@ import java.util.concurrent.TimeUnit;
 public abstract class Mojang {
   
   private static final List<Mojang> MOJANGAPIS;
-  private static final Cache<String, String> CACHED_UUID, CACHED_PROPERTY;
+  private static final Cache<String, String> CACHED_UUID, CACHED_PROPERTY, CACHED_NAME;
   
   static {
     MOJANGAPIS = new ArrayList<>();
     MOJANGAPIS.add(new MojangAPI());
     
+    CACHED_NAME = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build();
     CACHED_UUID = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).build();
     CACHED_PROPERTY = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
   }
@@ -42,6 +43,26 @@ public abstract class Mojang {
     }
     
     throw new InvalidMojangException("Nenhuma api conseguiu pegar o UUID pelo nome: " + name);
+  }
+
+  public static String getName(UUID uuid) throws InvalidMojangException {
+    String name = CACHED_NAME.getIfPresent(uuid.toString());
+    if (name != null) {
+      return name;
+    }
+
+    for (Mojang api : MOJANGAPIS) {
+      name = api.fetchName(uuid);
+      if (api.getResponse()) {
+        if (name != null) {
+          CACHED_NAME.put(uuid.toString(), name);
+        }
+
+        return name;
+      }
+    }
+
+    throw new InvalidMojangException("Nenhuma api conseguiu pegar o nome pelo UUID: "+uuid.toString());
   }
 
   public static String getSkinProperty(String id) throws InvalidMojangException {
@@ -74,6 +95,8 @@ public abstract class Mojang {
   }
   
   public abstract String fetchId(String name);
+
+  public abstract String fetchName(UUID uuid);
   
   public abstract String fetchSkinProperty(String id);
   

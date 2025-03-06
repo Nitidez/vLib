@@ -24,6 +24,7 @@
                     <include>plugin.yml</include>
                     <include>config.yml</include>
                     <include>ranks.yml</include>
+                    <include>servers.yml</include>
                 </includes>
             </resource>
         </resources>
@@ -40,11 +41,21 @@
     </build>
     <repositories>
         <repository>
+            <id>ME1312.net</id>
+            <url>https://dev.ME1312.net/maven</url>
+        </repository>
+        <repository>
             <id>dmulloy2-repo</id>
             <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>
+        <dependency>
+            <groupId>net.ME1312.SubServers</groupId>
+            <artifactId>SubServers.Client.Bukkit</artifactId>
+            <version>21w52a</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>

@@ -18,6 +18,8 @@ import tech.nitidez.valarlibrary.lib.hologram.Hologram;
 import tech.nitidez.valarlibrary.lib.tag.TagLib;
 import tech.nitidez.valarlibrary.player.profile.Profile;
 import tech.nitidez.valarlibrary.ranks.Rank;
+import tech.nitidez.valarlibrary.servers.Servers;
+import tech.nitidez.valarlibrary.servers.Servers.ValarServer;
 
 public class DebugCommand extends Commands {
 
@@ -71,11 +73,23 @@ public class DebugCommand extends Commands {
             TagLib.setPriority(plr, plr, Integer.parseInt(args[1]));
             break;
         case 11:
-            Profile profile = Profile.loadProfile(plr);
+            Profile profile = Profile.createOrLoadProfile(plr);
             profile.setTag(Rank.getRank("administrator"));
             profile.setPreference("lobby", true);
             plr.sendMessage(profile.getPreferences().toString());
+            profile.setFake("OutroNomeSlk");
+            plr.sendMessage(profile.getFake());
             Database.getDatabase().save(DataTable.getTable("vlDB_Profile").get());
+            break;
+        case 12:
+            plr.sendMessage(plr.getName());
+            break;
+        case 13:
+            plr.sendMessage(Profile.hasProfile(plr.getUniqueId().toString()) + "");
+            break;
+        case 14:
+            ValarServer server = Servers.getServer("0.0.0.0", 25565);
+            plr.sendMessage(server.toString());
             break;
         default:
             sender.sendMessage("nothing");

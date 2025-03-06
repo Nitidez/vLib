@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.UUID;
 
 public class MojangAPI extends Mojang {
   
@@ -31,6 +32,25 @@ public class MojangAPI extends Mojang {
     } catch (Exception e) {
       return null;
     }
+  }
+
+  @Override
+  public String fetchName(UUID uuid) {
+      this.response = false;
+      try {
+        URLConnection conn = new URL("https://api.mojang.com/user/profile/" + uuid.toString()).openConnection();
+        conn.setConnectTimeout(5000);
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        this.response = true;
+        StringBuilder builder = new StringBuilder();
+        String read;
+        while ((read = reader.readLine()) != null) {
+          builder.append(read);
+        }
+        return builder.length() == 0 ? null : new JsonParser().parse(builder.toString()).getAsJsonObject().get("name").getAsString();
+      } catch (Exception e) {
+        return null;
+      }
   }
   
   @Override

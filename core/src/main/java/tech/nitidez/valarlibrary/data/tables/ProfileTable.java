@@ -17,6 +17,13 @@ public class ProfileTable extends DataTable {
                 Optional.empty()
             ),
             new DataColumn(
+                "name",
+                String.class,
+                false, false, true,
+                Optional.of(16),
+                Optional.of("")
+            ),
+            new DataColumn(
                 "secondarycoins",
                 String.class,
                 false, false, false,
