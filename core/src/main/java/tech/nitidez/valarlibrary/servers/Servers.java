@@ -19,6 +19,7 @@ import tech.nitidez.valarlibrary.servers.ServerHandshake.ServerInfo;
 public class Servers {
     private static List<ServerGroup> GROUPS = new ArrayList<>();
     private static ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(1);
+    private static SubAPI api = SubAPI.getInstance();
 
     public static class ServerGroup {
         private List<ValarServer> servers;
@@ -40,12 +41,10 @@ public class Servers {
             List<ValarServer> serverList = new ArrayList<>();
             serverList.addAll(this.servers);
             if (vLib.SUBSERVERS) {
-                SubAPI api = SubAPI.getInstance();
                 for (String sgroup : this.subservers) {
                     api.getGroup(sgroup, group -> {
                         if (group != null) {
                             group.value().forEach(server -> {
-                                server.refresh();
                                 InetSocketAddress address = server.getAddress();
                                 serverList.add(new ValarServer(address.getHostName(), address.getPort(), server.getName()));
                             });
@@ -153,6 +152,18 @@ public class Servers {
         long updateTime = cfg.getInt("servers.update");
         SCHEDULER.scheduleAtFixedRate(() -> {
             getServers().forEach(s -> s.updateHandshake());
+            if (vLib.SUBSERVERS) {
+                List<String> sgroups = new ArrayList<>(GROUPS.stream().map(g -> g.subservers).flatMap(List::stream).collect(Collectors.toSet()));
+                for (String sgroup : sgroups) {
+                    api.getGroup(sgroup, group -> {
+                        if (group != null) {
+                            group.value().forEach(server -> {
+                                server.refresh();
+                            });
+                        }
+                    });
+                }
+            }
         }, updateTime, updateTime, TimeUnit.SECONDS);
     }
 
