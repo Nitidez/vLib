@@ -15,6 +15,7 @@ import tech.nitidez.valarlibrary.lib.entity.giantitem.GiantItem;
 import tech.nitidez.valarlibrary.lib.entity.npc.NPC;
 import tech.nitidez.valarlibrary.lib.entity.npc.skin.NPCSkinData;
 import tech.nitidez.valarlibrary.lib.hologram.Hologram;
+import tech.nitidez.valarlibrary.lib.scoreboard.SBLib;
 import tech.nitidez.valarlibrary.lib.tag.TagLib;
 import tech.nitidez.valarlibrary.player.profile.Profile;
 import tech.nitidez.valarlibrary.ranks.Rank;
@@ -30,6 +31,7 @@ public class DebugCommand extends Commands {
     @Override
     public void perform(CommandSender sender, String label, String[] args) {
         Player plr = ((Player) sender);
+        SBLib sb = new SBLib(plr);
         switch (Integer.parseInt(args[0])) {
         case 1:
             NPC newNPC = new NPC(plr.getLocation());
@@ -90,6 +92,15 @@ public class DebugCommand extends Commands {
         case 14:
             ValarServer server = Servers.getServer("0.0.0.0", 25565);
             plr.sendMessage(server.toString());
+            break;
+        case 15:
+            sb.setTitle("um titulo");
+            break;
+        case 16:
+            sb.setBoard("outro titulo", "linha um", "linha dois");
+            break;
+        case 17:
+            sb.removeBoard();
             break;
         default:
             sender.sendMessage("nothing");

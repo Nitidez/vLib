@@ -19,7 +19,6 @@ import tech.nitidez.valarlibrary.servers.ServerHandshake.ServerInfo;
 public class Servers {
     private static List<ServerGroup> GROUPS = new ArrayList<>();
     private static ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(1);
-    private static SubAPI api = SubAPI.getInstance();
 
     public static class ServerGroup {
         private List<ValarServer> servers;
@@ -42,6 +41,7 @@ public class Servers {
             serverList.addAll(this.servers);
             if (vLib.SUBSERVERS) {
                 for (String sgroup : this.subservers) {
+                    SubAPI api = SubAPI.getInstance();
                     api.getGroup(sgroup, group -> {
                         if (group != null) {
                             group.value().forEach(server -> {
@@ -155,6 +155,7 @@ public class Servers {
             if (vLib.SUBSERVERS) {
                 List<String> sgroups = new ArrayList<>(GROUPS.stream().map(g -> g.subservers).flatMap(List::stream).collect(Collectors.toSet()));
                 for (String sgroup : sgroups) {
+                    SubAPI api = SubAPI.getInstance();
                     api.getGroup(sgroup, group -> {
                         if (group != null) {
                             group.value().forEach(server -> {
