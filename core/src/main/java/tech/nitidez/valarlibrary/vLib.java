@@ -9,6 +9,7 @@ import tech.nitidez.valarlibrary.cmds.Commands;
 import tech.nitidez.valarlibrary.data.Database;
 import tech.nitidez.valarlibrary.data.data.DataTable;
 import tech.nitidez.valarlibrary.data.tables.ProfileTable;
+import tech.nitidez.valarlibrary.lib.localization.LanguageAPI;
 import tech.nitidez.valarlibrary.listeners.Listeners;
 import tech.nitidez.valarlibrary.plugin.ValarPlugin;
 import tech.nitidez.valarlibrary.ranks.Rank;
@@ -31,6 +32,7 @@ public class vLib extends ValarPlugin {
     @Override
     public void start() {
         instance = this;
+        LanguageAPI.setupLanguages();
     }
 
     @Override

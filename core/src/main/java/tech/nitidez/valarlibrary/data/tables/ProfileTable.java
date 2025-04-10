@@ -38,6 +38,13 @@ public class ProfileTable extends DataTable {
                 Optional.of("")
             ),
             new DataColumn(
+                "lang",
+                String.class,
+                false, false, false,
+                Optional.empty(),
+                Optional.of("auto")
+            ),
+            new DataColumn(
                 "faked",
                 String.class,
                 false, false, false,

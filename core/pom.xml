@@ -25,6 +25,8 @@
                     <include>config.yml</include>
                     <include>ranks.yml</include>
                     <include>servers.yml</include>
+                    <include>lang/en_us.json</include>
+                    <include>lang/pt_br.json</include>
                 </includes>
             </resource>
         </resources>

@@ -7,3 +7,5 @@ database:
     name: "db"
     user: "root"
     password: "password"
+
+default-lang: "en_us"

@@ -20,6 +20,7 @@ import tech.nitidez.valarlibrary.data.Database;
 import tech.nitidez.valarlibrary.data.data.DataRow;
 import tech.nitidez.valarlibrary.data.data.DataTable;
 import tech.nitidez.valarlibrary.data.tables.ProfileTable;
+import tech.nitidez.valarlibrary.lib.localization.LanguageAPI;
 import tech.nitidez.valarlibrary.lib.profile.Mojang;
 import tech.nitidez.valarlibrary.ranks.Rank;
 
@@ -142,6 +143,12 @@ public class Profile {
     public Instant getLastLogin() {
         long lastlogin = (long) this.data.get("lastlogin").orElse(System.currentTimeMillis());
         return Instant.ofEpochMilli(lastlogin);
+    }
+
+    public LanguageAPI getLanguage() {
+        String lang = (String) this.data.get("lang").orElse("");
+        if (LanguageAPI.hasLanguage(lang)) return LanguageAPI.getLanguage(lang);
+        return null;
     }
 
     public List<Rank> getRanks() {
