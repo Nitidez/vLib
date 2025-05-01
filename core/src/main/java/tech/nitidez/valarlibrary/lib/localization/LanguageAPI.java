@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
@@ -42,6 +44,22 @@ public class LanguageAPI {
     }
 
     public JsonObject get() {return this.values;}
+
+    public JsonElement get(String element) {
+        try {
+            List<String> paths = Arrays.asList(element.split("."));
+            JsonObject lastPath = get();
+            for (int index = 1; index < paths.size(); index++) {
+                lastPath = lastPath.get(paths.get(index)).getAsJsonObject();
+            }
+            JsonElement result = lastPath.get(paths.get(paths.size()-1));
+            if (result == null) throw new Error();
+            return result;
+        } catch (Exception e) {
+            if (this.equals(getDefaultLang())) return null;
+            return getDefaultLang().get(element);
+        }
+    }
 
     public void insertDefaults(JsonObject json) {
         this.defaults = mergeJson(this.defaults, json);

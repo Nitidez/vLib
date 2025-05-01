@@ -21,12 +21,7 @@
                 <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources/</directory>
                 <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                    <include>ranks.yml</include>
-                    <include>servers.yml</include>
-                    <include>lang/en_us.json</include>
-                    <include>lang/pt_br.json</include>
+                    <include>**/*</include>
                 </includes>
             </resource>
         </resources>
@@ -64,6 +59,11 @@
         </repository>
     </repositories>
     <dependencies>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.20.0</version>
+        </dependency>
         <dependency>
             <groupId>net.ME1312.SubServers</groupId>
             <artifactId>SubServers.Client.Bukkit</artifactId>

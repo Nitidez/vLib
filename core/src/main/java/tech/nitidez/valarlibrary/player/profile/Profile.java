@@ -214,7 +214,7 @@ public class Profile {
         }
         if (plr != null) {
             String rankName = profile.getRanks0(plr).get(0).getRankId();
-            if (!profile.getData().get("rank").equals(rankName)) profile.getData().set("rank", rankName);
+            if (!profile.getData().get("rank").get().equals(rankName)) profile.getData().set("rank", rankName);
         }
         return profile;
     }
