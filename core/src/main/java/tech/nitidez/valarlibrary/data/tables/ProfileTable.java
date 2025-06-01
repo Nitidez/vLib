@@ -19,7 +19,7 @@ public class ProfileTable extends DataTable {
             new DataColumn(
                 "name",
                 String.class,
-                false, false, true,
+                false, false, false,
                 Optional.of(16),
                 Optional.of("")
             ),
@@ -88,6 +88,13 @@ public class ProfileTable extends DataTable {
             ),
             new DataColumn(
                 "achievements",
+                String.class,
+                false, false, false,
+                Optional.empty(),
+                Optional.of("[]")
+            ),
+            new DataColumn(
+                "skins",
                 String.class,
                 false, false, false,
                 Optional.empty(),
